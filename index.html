@@ -1,0 +1,966 @@
+<!DOCTYPE html>
+<html lang="ru">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+
+  <title>Для Вики ✨</title>
+
+  <meta
+    name="description"
+    content="Небольшой способ познакомиться без скучных шаблонных переписок"
+  />
+
+  <style>
+    * {
+      box-sizing: border-box;
+      margin: 0;
+      padding: 0;
+    }
+
+    :root {
+      --bg: #f7f4f8;
+      --card: rgba(255, 255, 255, 0.86);
+      --text: #29252d;
+      --muted: #77717c;
+      --accent: #8d668f;
+      --accent-dark: #765478;
+      --border: #e8e1e9;
+      --option: #faf7fb;
+    }
+
+    body {
+      min-height: 100vh;
+      font-family:
+        Inter,
+        -apple-system,
+        BlinkMacSystemFont,
+        "Segoe UI",
+        sans-serif;
+
+      background:
+        radial-gradient(circle at top left, #eadfec 0, transparent 38%),
+        radial-gradient(circle at bottom right, #e2e6f3 0, transparent 38%),
+        var(--bg);
+
+      color: var(--text);
+
+      display: flex;
+      align-items: center;
+      justify-content: center;
+
+      padding: 24px;
+    }
+
+    .container {
+      width: 100%;
+      max-width: 680px;
+    }
+
+    .card {
+      background: var(--card);
+      backdrop-filter: blur(16px);
+      border: 1px solid rgba(255, 255, 255, 0.75);
+
+      border-radius: 28px;
+
+      box-shadow:
+        0 20px 60px rgba(65, 44, 68, 0.10);
+
+      padding: 38px;
+    }
+
+    .hidden {
+      display: none !important;
+    }
+
+    .eyebrow {
+      color: var(--accent);
+      font-weight: 700;
+      font-size: 14px;
+      margin-bottom: 14px;
+    }
+
+    h1 {
+      font-size: clamp(34px, 7vw, 52px);
+      line-height: 1.05;
+      letter-spacing: -2px;
+      margin-bottom: 18px;
+    }
+
+    h2 {
+      font-size: clamp(25px, 5vw, 34px);
+      line-height: 1.2;
+      margin-bottom: 14px;
+    }
+
+    p {
+      color: var(--muted);
+      line-height: 1.65;
+    }
+
+    .intro-text {
+      font-size: 17px;
+      margin-bottom: 30px;
+    }
+
+    .small {
+      font-size: 14px;
+      margin-top: 14px;
+    }
+
+    button {
+      font: inherit;
+    }
+
+    .primary-btn {
+      border: 0;
+      background: var(--accent);
+      color: white;
+
+      padding: 15px 24px;
+
+      border-radius: 14px;
+
+      font-weight: 700;
+
+      cursor: pointer;
+
+      transition: 0.2s ease;
+    }
+
+    .primary-btn:hover {
+      background: var(--accent-dark);
+      transform: translateY(-1px);
+    }
+
+    .primary-btn:disabled {
+      opacity: 0.5;
+      cursor: not-allowed;
+      transform: none;
+    }
+
+    .secondary-btn {
+      border: 1px solid var(--border);
+      background: white;
+      color: var(--text);
+
+      padding: 14px 20px;
+      border-radius: 14px;
+
+      cursor: pointer;
+    }
+
+    .progress-wrapper {
+      margin-bottom: 30px;
+    }
+
+    .progress-info {
+      display: flex;
+      justify-content: space-between;
+
+      font-size: 13px;
+      color: var(--muted);
+
+      margin-bottom: 9px;
+    }
+
+    .progress {
+      height: 7px;
+      background: #ebe5ec;
+      border-radius: 99px;
+      overflow: hidden;
+    }
+
+    .progress-bar {
+      height: 100%;
+      width: 0%;
+      background: var(--accent);
+      border-radius: 99px;
+      transition: width 0.35s ease;
+    }
+
+    .question-number {
+      color: var(--accent);
+      font-size: 14px;
+      font-weight: 700;
+      margin-bottom: 10px;
+    }
+
+    .question-description {
+      margin-bottom: 22px;
+    }
+
+    textarea,
+    input[type="text"] {
+      width: 100%;
+
+      border: 1px solid var(--border);
+      background: rgba(255, 255, 255, 0.9);
+
+      border-radius: 16px;
+
+      padding: 16px;
+
+      font: inherit;
+      color: var(--text);
+
+      outline: none;
+
+      resize: vertical;
+
+      transition: 0.2s;
+    }
+
+    textarea {
+      min-height: 130px;
+    }
+
+    textarea:focus,
+    input:focus {
+      border-color: var(--accent);
+      box-shadow: 0 0 0 4px rgba(141, 102, 143, 0.10);
+    }
+
+    .options {
+      display: grid;
+      gap: 10px;
+    }
+
+    .option {
+      border: 1px solid var(--border);
+      background: var(--option);
+
+      border-radius: 14px;
+
+      padding: 15px 17px;
+
+      cursor: pointer;
+
+      transition: 0.18s ease;
+    }
+
+    .option:hover {
+      border-color: #cdbace;
+      transform: translateY(-1px);
+    }
+
+    .option.selected {
+      border-color: var(--accent);
+      background: #f1e8f2;
+    }
+
+    .navigation {
+      display: flex;
+      justify-content: space-between;
+      gap: 12px;
+
+      margin-top: 28px;
+    }
+
+    .navigation .primary-btn {
+      margin-left: auto;
+    }
+
+    .final-message {
+      text-align: center;
+      padding: 15px 0;
+    }
+
+    .emoji {
+      font-size: 54px;
+      margin-bottom: 18px;
+    }
+
+    .error {
+      color: #a64646;
+      font-size: 14px;
+      margin-top: 12px;
+    }
+
+    @media (max-width: 600px) {
+      body {
+        padding: 14px;
+      }
+
+      .card {
+        padding: 25px 20px;
+        border-radius: 22px;
+      }
+
+      .navigation {
+        flex-wrap: wrap;
+      }
+    }
+  </style>
+</head>
+
+<body>
+
+  <main class="container">
+
+    <!-- Стартовый экран -->
+    <section id="welcomeScreen" class="card">
+
+      <div class="eyebrow">Привет, Вика 👋</div>
+
+      <h1>
+        Давай познакомимся
+        чуть менее скучно
+      </h1>
+
+      <p class="intro-text">
+        Мне показалось немного странным продолжать общение
+        стандартным способом:
+        «чем занимаешься?», «что любишь?»,
+        «как прошёл день?» и так далее.
+        <br><br>
+        Поэтому вместо очередных одинаковых вопросов
+        я зачем-то сделал целый сайт 😄
+      </p>
+
+      <button class="primary-btn" onclick="startQuiz()">
+        Ну ладно, погнали →
+      </button>
+
+      <p class="small">
+        Здесь нет правильных ответов. Можно отвечать коротко,
+        подробно или вообще как захочется.
+      </p>
+
+    </section>
+
+
+    <!-- Основной экран -->
+    <section id="quizScreen" class="card hidden">
+
+      <div class="progress-wrapper">
+
+        <div class="progress-info">
+          <span>Мини-знакомство</span>
+          <span id="progressText"></span>
+        </div>
+
+        <div class="progress">
+          <div id="progressBar" class="progress-bar"></div>
+        </div>
+
+      </div>
+
+
+      <div id="questionContainer"></div>
+
+
+      <div class="navigation">
+
+        <button
+          id="backButton"
+          class="secondary-btn"
+          onclick="previousQuestion()"
+        >
+          ← Назад
+        </button>
+
+        <button
+          id="nextButton"
+          class="primary-btn"
+          onclick="nextQuestion()"
+        >
+          Дальше →
+        </button>
+
+      </div>
+
+      <div id="errorMessage" class="error"></div>
+
+    </section>
+
+
+    <!-- Спасибо -->
+    <section id="successScreen" class="card hidden">
+
+      <div class="final-message">
+
+        <div class="emoji">✨</div>
+
+        <h2>Ответы успешно отправлены</h2>
+
+        <p>
+          Теперь у нас хотя бы есть темы интереснее,
+          чем обсуждать погоду в Мурманской области 😄
+          <br><br>
+          Спасибо, что дошла до конца.
+        </p>
+
+      </div>
+
+    </section>
+
+  </main>
+
+
+<script>
+
+const FORMSPREE_URL = "https://formspree.io/f/mlgyornw";
+
+
+const questions = [
+
+  {
+    question:
+      "Представь, что завтра у тебя полностью свободный день. Как бы ты его провела?",
+
+    type: "textarea",
+
+    placeholder:
+      "Можно расписать идеальный сценарий..."
+  },
+
+
+  {
+    question:
+      "Какой вариант вечера тебе ближе?",
+
+    type: "options",
+
+    options: [
+      "Прогулка и много разговоров",
+      "Кафе или ресторан",
+      "Фильм и что-нибудь вкусное",
+      "Куда-нибудь внезапно уехать",
+      "Дом, плед и чтобы меня никто не трогал",
+      "Зависит от настроения"
+    ]
+  },
+
+
+  {
+    question:
+      "Ты больше за спонтанность или любишь всё заранее планировать?",
+
+    type: "options",
+
+    options: [
+      "Я человек-план",
+      "Скорее планирую",
+      "50 / 50",
+      "Обожаю спонтанность",
+      "План существует только для того, чтобы его нарушить"
+    ]
+  },
+
+
+  {
+    question:
+      "Что тебе обычно нравится в человеке в первые минуты общения?",
+
+    type: "textarea",
+
+    placeholder:
+      "Манера общения, юмор, характер..."
+  },
+
+
+  {
+    question:
+      "А что может очень быстро отбить желание продолжать общение?",
+
+    type: "textarea",
+
+    placeholder:
+      "Можно честно :)"
+  },
+
+
+  {
+    question:
+      "Какой юмор тебе нравится?",
+
+    type: "options",
+
+    options: [
+      "Сарказм",
+      "Абсурдный",
+      "Чёрный юмор",
+      "Мемы и тупые шутки",
+      "Добрый юмор",
+      "Практически любой, если человек умеет шутить"
+    ]
+  },
+
+
+  {
+    question:
+      "Есть тема, о которой ты можешь говорить очень долго, если тебя вовремя не остановить?",
+
+    type: "textarea",
+
+    placeholder:
+      "Хобби, работа, музыка, путешествия, какая-нибудь странная тема..."
+  },
+
+
+  {
+    question:
+      "Какой у тебя самый странный, бесполезный или неожиданный талант?",
+
+    type: "textarea",
+
+    placeholder:
+      "Вот здесь особенно интересно..."
+  },
+
+
+  {
+    question:
+      "Если бы прямо сейчас можно было телепортироваться куда угодно на несколько часов, куда бы ты отправилась?",
+
+    type: "text",
+
+    placeholder:
+      "Любое место"
+  },
+
+
+  {
+    question:
+      "Что тебе ближе?",
+
+    type: "options",
+
+    options: [
+      "Море",
+      "Горы",
+      "Большой город",
+      "Маленький уютный город",
+      "Природа и минимум людей",
+      "Мне нужно всё сразу"
+    ]
+  },
+
+
+  {
+    question:
+      "Как выглядит человек, с которым тебе действительно комфортно общаться?",
+
+    type: "textarea",
+
+    placeholder:
+      "Не внешность, а именно характер и общение"
+  },
+
+
+  {
+    question:
+      "Ты любишь людей, с которыми можно спокойно молчать, или тебе нужно постоянно разговаривать?",
+
+    type: "options",
+
+    options: [
+      "Можно молчать часами",
+      "Люблю много разговаривать",
+      "Главное, чтобы молчание не было неловким",
+      "Очень зависит от человека"
+    ]
+  },
+
+
+  {
+    question:
+      "Есть какая-нибудь маленькая вещь, которая почти всегда поднимает тебе настроение?",
+
+    type: "textarea",
+
+    placeholder:
+      "Еда, музыка, человек, прогулка, котики..."
+  },
+
+
+  {
+    question:
+      "Допустим, мы решили встретиться. Какой вариант звучит лучше?",
+
+    type: "options",
+
+    options: [
+      "Просто гулять и болтать",
+      "Кофе / кафе",
+      "Кино",
+      "Какая-нибудь активность",
+      "Куда-нибудь съездить",
+      "Ничего не планировать и решить на месте"
+    ]
+  },
+
+
+  {
+    question:
+      "Насколько странно получить от человека вместо обычной переписки целый сайт?",
+
+    type: "options",
+
+    options: [
+      "1 — вообще нормально",
+      "3 — необычно, но прикольно",
+      "5 — человек явно заморочился",
+      "7 — немного подозрительно 😄",
+      "10 — что вообще происходит?"
+    ]
+  },
+
+
+  {
+    question:
+      "Теперь твоя очередь 😄 Какой вопрос ты хотела бы задать мне?",
+
+    description:
+      "Любой. Нормальный, странный, личный, смешной или внезапный. Постараюсь ответить честно.",
+
+    type: "textarea",
+
+    placeholder:
+      "Твой вопрос мне..."
+  }
+
+];
+
+
+let currentQuestion = 0;
+
+let answers = new Array(questions.length).fill("");
+
+
+
+function startQuiz() {
+
+  document
+    .getElementById("welcomeScreen")
+    .classList.add("hidden");
+
+  document
+    .getElementById("quizScreen")
+    .classList.remove("hidden");
+
+  renderQuestion();
+
+}
+
+
+
+function renderQuestion() {
+
+  const question = questions[currentQuestion];
+
+  const container =
+    document.getElementById("questionContainer");
+
+
+  document.getElementById("errorMessage").textContent = "";
+
+
+  let html = `
+
+    <div class="question-number">
+      Вопрос ${currentQuestion + 1}
+    </div>
+
+    <h2>
+      ${question.question}
+    </h2>
+
+  `;
+
+
+  if (question.description) {
+
+    html += `
+
+      <p class="question-description">
+        ${question.description}
+      </p>
+
+    `;
+
+  }
+
+
+  if (question.type === "textarea") {
+
+    html += `
+
+      <textarea
+        id="answerInput"
+        placeholder="${question.placeholder || ""}"
+        oninput="saveTextAnswer()"
+      >${answers[currentQuestion]}</textarea>
+
+    `;
+
+  }
+
+
+  else if (question.type === "text") {
+
+    html += `
+
+      <input
+        id="answerInput"
+        type="text"
+        placeholder="${question.placeholder || ""}"
+        value="${answers[currentQuestion]}"
+        oninput="saveTextAnswer()"
+      />
+
+    `;
+
+  }
+
+
+  else if (question.type === "options") {
+
+    html += `<div class="options">`;
+
+    question.options.forEach(option => {
+
+      const selected =
+        answers[currentQuestion] === option
+        ? "selected"
+        : "";
+
+      html += `
+
+        <div
+          class="option ${selected}"
+          onclick='selectOption(${JSON.stringify(option)})'
+        >
+          ${option}
+        </div>
+
+      `;
+
+    });
+
+    html += `</div>`;
+
+  }
+
+
+  container.innerHTML = html;
+
+
+  updateNavigation();
+
+}
+
+
+
+function saveTextAnswer() {
+
+  const input =
+    document.getElementById("answerInput");
+
+  answers[currentQuestion] =
+    input.value.trim();
+
+}
+
+
+
+function selectOption(option) {
+
+  answers[currentQuestion] = option;
+
+  renderQuestion();
+
+}
+
+
+
+function updateNavigation() {
+
+  const progress =
+    ((currentQuestion + 1) / questions.length) * 100;
+
+
+  document.getElementById("progressBar").style.width =
+    `${progress}%`;
+
+
+  document.getElementById("progressText").textContent =
+    `${currentQuestion + 1} / ${questions.length}`;
+
+
+  document.getElementById("backButton").style.visibility =
+    currentQuestion === 0
+      ? "hidden"
+      : "visible";
+
+
+  const nextButton =
+    document.getElementById("nextButton");
+
+
+  if (currentQuestion === questions.length - 1) {
+
+    nextButton.textContent =
+      "Отправить ответы ✨";
+
+  }
+
+  else {
+
+    nextButton.textContent =
+      "Дальше →";
+
+  }
+
+}
+
+
+
+function nextQuestion() {
+
+  const currentAnswer =
+    answers[currentQuestion];
+
+
+  if (!currentAnswer) {
+
+    document.getElementById("errorMessage").textContent =
+      "Ответь хоть что-нибудь 🙂";
+
+    return;
+
+  }
+
+
+  if (currentQuestion < questions.length - 1) {
+
+    currentQuestion++;
+
+    renderQuestion();
+
+    window.scrollTo({
+      top: 0,
+      behavior: "smooth"
+    });
+
+  }
+
+  else {
+
+    submitAnswers();
+
+  }
+
+}
+
+
+
+function previousQuestion() {
+
+  if (currentQuestion > 0) {
+
+    currentQuestion--;
+
+    renderQuestion();
+
+  }
+
+}
+
+
+
+async function submitAnswers() {
+
+  const button =
+    document.getElementById("nextButton");
+
+
+  button.disabled = true;
+  button.textContent = "Отправляю...";
+
+
+  const formData =
+    new FormData();
+
+
+  formData.append(
+    "_subject",
+    "Ответы Вики с сайта"
+  );
+
+
+  formData.append(
+    "Имя",
+    "Вика"
+  );
+
+
+  questions.forEach(
+    (question, index) => {
+
+      formData.append(
+        `${index + 1}. ${question.question}`,
+        answers[index]
+      );
+
+    }
+  );
+
+
+  try {
+
+    const response =
+      await fetch(
+        FORMSPREE_URL,
+        {
+          method: "POST",
+          body: formData,
+          headers: {
+            "Accept":
+              "application/json"
+          }
+        }
+      );
+
+
+    if (!response.ok) {
+
+      throw new Error(
+        "Ошибка отправки"
+      );
+
+    }
+
+
+    document
+      .getElementById("quizScreen")
+      .classList.add("hidden");
+
+
+    document
+      .getElementById("successScreen")
+      .classList.remove("hidden");
+
+
+  }
+
+  catch (error) {
+
+    document.getElementById("errorMessage").textContent =
+      "Что-то пошло не так при отправке. Попробуй ещё раз.";
+
+    button.disabled = false;
+
+    button.textContent =
+      "Отправить ответы ✨";
+
+  }
+
+}
+
+</script>
+
+</body>
+</html>
